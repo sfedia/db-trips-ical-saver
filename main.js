@@ -169,10 +169,19 @@
 
                 window.calEntry = window.icsFormatter();
 
+                var lastTimestamp = null;
                 parsedTripParts.forEach((part, i) => {
                     var stringDate = document.querySelector(".default-reiseloesung-list-page-controls__title-date").innerText;
                     var begin = new Date(stringDate + ", " + part.startTime);
+                    if (lastTimestamp !== null && lastTimestamp > begin) {
+                        begin.setDate(begin.getDate() + 1);
+                    }
+                    lastTimestamp = begin;
                     var end = new Date(stringDate + ", " + part.endTime);
+                    if (lastTimestamp > end) {
+                        end.setDate(end.getDate() + 1);
+                    }
+                    lastTimestamp = end;
                     var title = part.eventName;
                     window.calEntry.addEvent(title, part.eventDescription, "", begin.toUTCString(), end.toUTCString());
                 });
