@@ -173,12 +173,12 @@
                 parsedTripParts.forEach((part, i) => {
                     var stringDate = document.querySelector(".default-reiseloesung-list-page-controls__title-date").innerText;
                     var begin = new Date(stringDate + ", " + part.startTime);
-                    if (lastTimestamp !== null && lastTimestamp > begin) {
+                    while (lastTimestamp !== null && lastTimestamp > begin) {
                         begin.setDate(begin.getDate() + 1);
                     }
                     lastTimestamp = begin;
                     var end = new Date(stringDate + ", " + part.endTime);
-                    if (lastTimestamp > end) {
+                    while (lastTimestamp > end) {
                         end.setDate(end.getDate() + 1);
                     }
                     lastTimestamp = end;
