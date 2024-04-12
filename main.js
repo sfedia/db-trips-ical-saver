@@ -158,7 +158,7 @@
         trip.querySelector(".reiseplan__details button").click();
         waitFor(
             function () {
-                return trip.querySelector(".reise-details__infos") != null && trip.querySelector("ri-transport-chip").getAttribute("transport-text") != null
+                return trip.querySelector(".reise-details__infos") !== null && trip.querySelector("ri-transport-chip").getAttribute("transport-text") !== null
             },
             function () {
                 trip.querySelector(".reise-details__infos").style.display = "none";
