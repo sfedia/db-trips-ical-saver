@@ -94,14 +94,14 @@
                 return calendarEvent;
             },
 
-            'download': function(filename, ext) {
+            'download': function(filename) {
                 if (calendarEvents.length < 1) {
                     return false;
                 }
                 var calendar = calendarStart + SEPARATOR + calendarEvents.join(SEPARATOR) + calendarEnd;
                 var a = document.createElement('a');
                 a.href = "data:text/calendar;charset=utf8," + escape(calendar);
-                a.download = 'db_trip.ics';
+                a.download = filename + '.ics';
                 document.getElementsByTagName('body')[0].appendChild(a);
                 a.click();
             }
@@ -151,6 +151,14 @@
         }, 50);
     }
 
+    function formatGermanString(german) {
+        let mp = {"ü": "ue", "ö": "oe", "ä": "ae", "ß": "ss"};
+        for (let repl in mp) {
+            german = german.replace(new RegExp(repl, "g"), mp[repl]);
+        }
+        return german.toLowerCase().split(/\s+/g)[0];
+    }
+
 
     function saveTripToICS (targetElement) {
         var trip = parent(targetElement, 7);
@@ -170,11 +178,17 @@
                 window.calEntry = window.icsFormatter();
 
                 var lastTimestamp = null;
+                var firstStation = null;
+                var lastStation = null;
+                var firstDate = null;
                 parsedTripParts.forEach((part, i) => {
                     var stringDate = document.querySelector(".default-reiseloesung-list-page-controls__title-date").innerText;
                     var begin = new Date(stringDate + ", " + part.startTime);
                     while (lastTimestamp !== null && lastTimestamp > begin) {
                         begin.setDate(begin.getDate() + 1);
+                    }
+                    if (i === 0) {
+                        firstDate = Math.floor(begin.getTime() / 1000);
                     }
                     lastTimestamp = begin;
                     var end = new Date(stringDate + ", " + part.endTime);
@@ -184,9 +198,15 @@
                     lastTimestamp = end;
                     var title = part.eventName;
                     window.calEntry.addEvent(title, part.eventDescription, "", begin.toUTCString(), end.toUTCString());
+                    if (i === 0) {
+                        firstStation = formatGermanString(part.fromStation);
+                    }
+                    if (i === (parsedTripParts.length - 1)) {
+                        lastStation = formatGermanString(part.fromStation);
+                    }
                 });
 
-                window.calEntry.download("db_trip");
+                window.calEntry.download(`db_trip_${firstStation}_${lastStation}_${firstDate}`);
                 trip.querySelector(".reiseplan__details button").click();
                 trip.querySelector(".reiseplan__details").style.display = "";
                 trip.querySelector(".reise-details__infos").style.display = "";
@@ -214,7 +234,9 @@
                 startTime: startTime,
                 endTime: endTime,
                 eventName: `(${trainName}) ${fromStation} - ${toStation}`,
-                eventDescription: `${trainName} ${fromStation} (${fromTrack}) - ${toStation} (${toTrack})`
+                eventDescription: `${trainName} ${fromStation} (${fromTrack}) - ${toStation} (${toTrack})`,
+                fromStation: fromStation,
+                toStation: toStation
             });
         });
 
