@@ -1,12 +1,15 @@
 // ==UserScript==
 // @name         DB Trips iCal Saver
 // @namespace    http://tampermonkey.net/
-// @version      2024-02-25
+// @version      0.2
 // @description  Adds "Add to Calendar" option for DB trips
 // @author       You
 // @match        https://int.bahn.de/en/buchung/fahrplan/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=bahn.de
 // @grant        none
+// @license      MIT
+// @downloadURL https://update.greasyfork.org/scripts/488267/DB%20Trips%20iCal%20Saver.user.js
+// @updateURL https://update.greasyfork.org/scripts/488267/DB%20Trips%20iCal%20Saver.meta.js
 // ==/UserScript==
 
 (function() {
@@ -202,7 +205,7 @@
                         firstStation = formatGermanString(part.fromStation);
                     }
                     if (i === (parsedTripParts.length - 1)) {
-                        lastStation = formatGermanString(part.fromStation);
+                        lastStation = formatGermanString(part.toStation);
                     }
                 });
 
