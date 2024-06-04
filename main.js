@@ -122,7 +122,7 @@
     function main () {
         var actionMenuUl = document.querySelectorAll(".ActionMenu div div ul");
         actionMenuUl.forEach((element, i) => {
-            if (element.querySelectorAll("li").length > 2) return;
+            if (element.querySelectorAll("li").length > 3) return;
             var addCalendarOption = document.createElement("li");
             addCalendarOption.className = "_content-button _content-button--with-icons add_to_calendar";
             addCalendarOption.setAttribute("style", "align-items: center; column-gap: .5rem; cursor: pointer; display: flex; padding: .75rem 1.0rem;");
